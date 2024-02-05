@@ -38,6 +38,15 @@ app.get('/api/info',(req,res)=>{
     res.send(`<p>Phonebook has info for ${length} people</p><p>${time}</p>`)
 })
 
+app.get('/api/persons/:id',(req,res)=>{
+    const id = Number(req.params.id);
+    if (id) {
+        res.send(persons.find(prs=>prs.id === id));
+    }
+    else {
+        res.status(404).end()
+    }
+})
 
 const PORT = 3001
 app.listen(PORT, () => {
