@@ -25,15 +25,28 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
+morgan.token('req-body', (req, res) => {
+    return JSON.stringify(req.body);
+  });
+  
+  
+  const logPostRequest = (req, res, next) => {
+    if (req.method === 'POST') {
+      return morgan(':method :url :status :res[content-length] - :response-time ms :req-body')(req,res,next);
+    }
+    next();
+  };
 
-app.use(morgan('tiny'))
+app.use(logPostRequest)
+// app.use(morgan('tiny'))
 
 app.use(express.json())
 
 app.post('/api/persons',(req,res)=>{
+    
     const id = Math.floor(Math.random()*1000); 
     const body = req.body
-    console.log(body);
+
 
     if (!body.number) {
     return res.status(400).json({ 
