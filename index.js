@@ -1,5 +1,7 @@
 const express = require('express')
 const app = express()
+const morgan = require('morgan')
+
 
 let persons = [
     { 
@@ -24,7 +26,7 @@ let persons = [
     }
 ]
 
-
+app.use(morgan('tiny'))
 
 app.use(express.json())
 
