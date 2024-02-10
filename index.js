@@ -42,7 +42,7 @@ morgan.token('req-body', (req, res) => {
 
 app.use(logPostRequest)
 // app.use(morgan('tiny'))
-
+app.use(express.static('dist'))
 app.use(express.json())
 
 app.post('/api/persons',(req,res)=>{
