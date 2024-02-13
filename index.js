@@ -83,14 +83,32 @@ app.get("/api/info", (req, res) => {
   res.send(`<p>Phonebook has info for ${length} people</p><p>${time}</p>`);
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  if (id) {
-    res.send(persons.find((prs) => prs.id === id));
-  } else {
-    res.status(404).end();
+
+app.get('/api/persons/:id', (request, response, next) => {
+  Person.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+
+    .catch(error => next(error))
+})
+
+app.put("/api/persons/:id",(request, response, next) => {
+  const body = request.body
+  const person = {
+    number: body.number
   }
-});
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
+}) 
 
 
 app.delete("/api/persons/:id", (request, response, next) => {
