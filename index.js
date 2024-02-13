@@ -92,13 +92,16 @@ app.get("/api/persons/:id", (req, res) => {
   }
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  if (id) {
-    res.send(persons.filter((prs) => prs.id !== id));
-  } else {
-    res.status(404).end();
-  }
+
+app.delete("/api/persons/:id", (request, response, next) => {
+  Person.findByIdAndDelete(request.params.id)
+    .then((result) => {
+      response.status(204).end();
+    })
+    .catch((error) => {
+      console.log(error);
+      response.status(500).end();
+    });
 });
 
 const PORT = process.env.PORT || 3001;
